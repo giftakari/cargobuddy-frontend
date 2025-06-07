@@ -19,7 +19,7 @@ import type {
 } from '../types';
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api`,
+    baseUrl: `https://cargobuddy-sails.onrender.com/api`,
     credentials: 'include',
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
