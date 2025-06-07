@@ -18,8 +18,11 @@ import type {
   RatingForm,
 } from '../types';
 
+
+ const baseUrl =import.meta.env.PROD? "https://cargobuddy-backend-sails-production.up.railway.app/api" : "/api";
+
 const baseQuery = fetchBaseQuery({
-    baseUrl: `https://cargobuddy-sails.onrender.com/api`,
+    baseUrl, 
     credentials: 'include',
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
