@@ -108,8 +108,8 @@ const RegisterPage: React.FC = () => {
       lastName: '',
       phone: '',
       userType: 'sender',
-      vehicleType: '',
-      licenseNumber: '',
+      vehicleType: undefined,
+      licenseNumber: undefined,
     },
   });
 
@@ -119,6 +119,12 @@ const RegisterPage: React.FC = () => {
   const onSubmit = async (data: RegisterRequest & { confirmPassword: string }) => {
     try {
       const { confirmPassword, ...registerData } = data;
+
+      if (registerData.userType === 'sender') {
+        delete registerData.vehicleType;
+        delete registerData.licenseNumber;
+      }
+      
       await register(registerData).unwrap();
       navigate('/dashboard');
     } catch (err) {
