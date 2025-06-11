@@ -735,7 +735,7 @@ const DeliveryDetail: React.FC = () => {
                       Created
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {format(new Date(delivery.createdAt), 'MMM dd, yyyy HH:mm')}
+                    {format(new Date(Number(delivery.createdAt)), 'MMM dd, yyyy HH:mm')}
                     </Typography>
                   </Box>
                 </Box>

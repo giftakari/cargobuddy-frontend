@@ -280,7 +280,9 @@ const SenderDashboard: React.FC = () => {
                               {delivery.pickupSuburb} → {delivery.dropoffSuburb}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                              Created {format(new Date(delivery.createdAt), 'MMM dd, yyyy')} • 
+                              Created {delivery.createdAt? format(new Date(Number(delivery.createdAt)), 'MMM dd, yyyy')
+  : 'N/A'}
+ • 
                               Budget: ${delivery.budget}
                             </Typography>
                           </Box>
