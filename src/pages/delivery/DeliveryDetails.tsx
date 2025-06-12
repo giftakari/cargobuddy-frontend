@@ -315,7 +315,7 @@ const DeliveryDetail: React.FC = () => {
 
   const safeFormatDate = (dateValue, formatString, fallback = 'Not set') => {
     if (!dateValue) return fallback;
-    
+    // This should fix that error
     try {
       const date = new Date(dateValue);
       if (isNaN(date.getTime())) {
