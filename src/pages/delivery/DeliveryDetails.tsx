@@ -312,6 +312,25 @@ const DeliveryDetail: React.FC = () => {
     }
   };
 
+
+  const safeFormatDate = (dateValue, formatString, fallback = 'Not set') => {
+    if (!dateValue) return fallback;
+    
+    try {
+      const date = new Date(dateValue);
+      if (isNaN(date.getTime())) {
+        return fallback;
+      }
+      return format(date, formatString);
+    } catch (error) {
+      console.error('Date formatting error:', error, 'for value:', dateValue);
+      return fallback;
+    }
+  };
+  
+  // Then use it:
+
+
   return (
     <Box>
       {/* Header */}
@@ -468,7 +487,7 @@ const DeliveryDetail: React.FC = () => {
                       Preferred Delivery Date
                     </Typography>
                     <Typography variant="body1">
-                      {format(new Date(delivery.preferredDeliveryDate), 'EEEE, MMMM dd, yyyy')}
+                      {safeFormatDate(new Date(delivery.preferredDeliveryDate), 'EEEE, MMMM dd, yyyy')}
                     </Typography>
                   </Grid>
                 )}
@@ -575,7 +594,7 @@ const DeliveryDetail: React.FC = () => {
                                 Route: {trip.fromSuburb} → {trip.toSuburb}
                               </Typography>
                               <Typography variant="body2" color="text.secondary" component="div">
-                                Departure: {format(new Date(trip.departureDateTime), 'MMM dd, HH:mm')} • 
+                                Departure: {safeFormatDate(new Date(trip.departureDateTime), 'MMM dd, HH:mm')} • 
                                 Detour: ~{trip.estimatedDetour} km
                               </Typography>
                               <Typography variant="body2" color="text.secondary" component="div">
@@ -684,7 +703,7 @@ const DeliveryDetail: React.FC = () => {
                                 </Typography>
                               )}
                               <Typography variant="caption" color="text.secondary" component="div">
-                                Bid placed {format(new Date(bid.createdAt), 'MMM dd, yyyy HH:mm')}
+                                Bid placed {safeFormatDate(new Date(bid.createdAt), 'MMM dd, yyyy HH:mm')}
                               </Typography>
                               {bid.status === 'pending' && (
                                 <Box sx={{ mt: 1 }}>
@@ -742,7 +761,7 @@ const DeliveryDetail: React.FC = () => {
                       Created
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                    {format(new Date(Number(delivery.createdAt)), 'MMM dd, yyyy HH:mm')}
+                    {safeFormatDate(new Date(delivery.createdAt), 'MMM dd, yyyy HH:mm')}
                     </Typography>
                   </Box>
                 </Box>
@@ -783,7 +802,7 @@ const DeliveryDetail: React.FC = () => {
                         Delivered
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {format(new Date(delivery.completedAt), 'MMM dd, yyyy HH:mm')}
+                        {safeFormatDate(new Date(delivery.completedAt), 'MMM dd, yyyy HH:mm')}
                       </Typography>
                     </Box>
                   </Box>
