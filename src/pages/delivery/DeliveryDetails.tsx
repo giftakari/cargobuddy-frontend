@@ -78,6 +78,13 @@ const DeliveryDetail: React.FC = () => {
   const [ratingComment, setRatingComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+
+  console.log('Delivery data:', {
+    createdAt: delivery?.createdAt,
+    preferredDeliveryDate: delivery?.preferredDeliveryDate,
+    completedAt: delivery?.completedAt
+  });
+
   // Show success message if redirected from creation
   const successMessage = location.state?.message;
 
