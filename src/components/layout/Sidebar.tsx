@@ -174,7 +174,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                 <Star sx={{ fontSize: 14, color: 'warning.main' }} />
                 <Typography variant="caption">
-                  {user.senderRating.toFixed(1)} ({user.totalSenderRatings || 0})
+                  {user.senderRating} ({user.totalSenderRatings || 0})
                 </Typography>
               </Box>
             )}
@@ -183,7 +183,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <DirectionsCar sx={{ fontSize: 14, color: 'info.main' }} />
                 <Star sx={{ fontSize: 14, color: 'warning.main' }} />
                 <Typography variant="caption">
-                  {user.driverRating.toFixed(1)} ({user.totalDriverRatings || 0})
+                  {user.driverRating} ({user.totalDriverRatings || 0})
                 </Typography>
               </Box>
             )}

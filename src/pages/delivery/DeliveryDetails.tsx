@@ -184,12 +184,17 @@ const DeliveryDetail: React.FC = () => {
   };
 
   // Helper function to get driver invitation/bid status
-  const getDriverStatus = (driverId: number) => {
-    // Check if there's an invitation for this driver
-    const invitation = invitations?.find(inv => inv.driver.id === driverId);
+
+const getDriverStatus = (driverId: number) => {
+  try {
+    // Now invitations will have real data instead of empty array
+    const invitation = !invitationsError && Array.isArray(invitations) 
+      ? invitations.find(inv => inv?.driver?.id === driverId)
+      : null;
     
-    // Check if there's a bid from this driver
-    const bid = bids?.find(b => b.bidder.id === driverId);
+    const bid = !bidsError && Array.isArray(bids)
+      ? bids.find(b => b?.bidder?.id === driverId)
+      : null;
     
     if (bid) {
       return {
@@ -202,7 +207,7 @@ const DeliveryDetail: React.FC = () => {
     if (invitation) {
       return {
         type: 'invitation',
-        status: invitation.status,
+        status: invitation.status, // 'sent', 'viewed', 'accepted', etc.
         data: invitation
       };
     }
@@ -212,8 +217,16 @@ const DeliveryDetail: React.FC = () => {
       status: 'none',
       data: null
     };
-  };
-
+    
+  } catch (error) {
+    console.error('Error in getDriverStatus:', error);
+    return {
+      type: 'error',
+      status: 'error',
+      data: null
+    };
+  }
+};
   // Helper function to get button state for a driver
   const getDriverButtonState = (trip: any) => {
     const driverStatus = getDriverStatus(trip.driver.id);
@@ -548,7 +561,7 @@ const DeliveryDetail: React.FC = () => {
                 </Typography>
                 
                 <List>
-                  {matchingTrips.slice(0, 5).map((trip, index) => (
+                  {matchingTrips.filter(trip => trip.driver && trip.driver.firstName).slice(0, 5).map((trip, index) => (
                     <React.Fragment key={trip.id}>
                       <ListItem
                         alignItems="flex-start"
@@ -566,7 +579,8 @@ const DeliveryDetail: React.FC = () => {
                           primary={
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <Typography variant="subtitle1" fontWeight="medium">
-                                {trip.driver.firstName} {trip.driver.lastName}
+                              {trip.driver ? `${trip.driver.firstName} ${trip.driver.lastName}` : 'Driver Unavailable'}
+
                               </Typography>
                               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                 <Chip
@@ -587,14 +601,17 @@ const DeliveryDetail: React.FC = () => {
                               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                                 <Star sx={{ fontSize: 16, color: 'warning.main' }} />
                                 <Typography variant="body2" color="text.secondary" component="span">
-                                  {trip.driver.driverRating.toFixed(1)} ({trip.driver.totalDriverRatings || 0} reviews)
+                                  {trip.driver ? 
+                                    `${trip.driver.driverRating?.toFixed(1) || 'N/A'} (${trip.driver.totalDriverRatings || 0} reviews)` :
+                                    'Driver rating unavailable'
+                                  }
                                 </Typography>
                               </Box>
                               <Typography variant="body2" color="text.secondary" component="div">
                                 Route: {trip.fromSuburb} → {trip.toSuburb}
                               </Typography>
                               <Typography variant="body2" color="text.secondary" component="div">
-                                Departure: {safeFormatDate(new Date(trip.departureDateTime), 'MMM dd, HH:mm')} • 
+                                Departure: {safeFormatDate(trip.departureDateTime, 'MMM dd, HH:mm')} • 
                                 Detour: ~{trip.estimatedDetour} km
                               </Typography>
                               <Typography variant="body2" color="text.secondary" component="div">
